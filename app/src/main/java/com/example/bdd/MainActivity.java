@@ -1,6 +1,8 @@
 package com.example.bdd;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.content.SharedPreferences;
@@ -12,6 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private RecyclerView mRecyclerView;
+    private MonRecyclerViewAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
+    public PlaneteDao planeteDao;
+    public List<Planete> planetes;
 
     final String PREFS_NAME = "preferences_file";
 
@@ -21,14 +29,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tv = findViewById(R.id.tv);
 
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "planetesDB").build();
 
-        PlaneteDao planeteDao = db.planeteDao();
+        planeteDao = db.planeteDao();
 
         loadData(planeteDao);
+
     }
 
     private void loadData(PlaneteDao planeteDao) {
@@ -44,17 +52,15 @@ public class MainActivity extends AppCompatActivity {
                     settings.edit().putBoolean("is_data_loaded", false).commit();
                 }
 
-                List<Planete> planetes = planeteDao.getAll();
 
-                tv.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        tv.setText("Il y a [" + planetes.size() + "] Planètes dans la base de données" );
-                        for (int i =0; i< planetes.size();i++) {
-                            Toast.makeText(MainActivity.this, "Planete = " + planetes.get(i).getNom(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                planetes = planeteDao.getAll();
+
+                mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+                mRecyclerView.setHasFixedSize(true);
+                mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mAdapter = new MonRecyclerViewAdapter(getApplicationContext(), planetes);
+                mRecyclerView.setAdapter(mAdapter);
 
             }
         }).start();
@@ -65,15 +71,15 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Planete> planetes = new ArrayList<>();
 
-        planetes.add(new Planete(1,"Mercure","4900"));
-        planetes.add(new Planete(2,"Venus","12000"));
-        planetes.add(new Planete(3,"Terre","12800"));
-        planetes.add(new Planete(4,"Mars","6800"));
-        planetes.add(new Planete(5,"Jupiter","144000"));
-        planetes.add(new Planete(6,"Saturne","120000"));
-        planetes.add(new Planete(7,"Uranus","52000"));
-        planetes.add(new Planete(8,"Neptune","50000"));
-        planetes.add(new Planete(9,"Pluton","2300"));
+        planetes.add(new Planete(1,"Mercure",4900));
+        planetes.add(new Planete(2,"Venus",12000));
+        planetes.add(new Planete(3,"Terre",12800));
+        planetes.add(new Planete(4,"Mars",6800));
+        planetes.add(new Planete(5,"Jupiter",144000));
+        planetes.add(new Planete(6,"Saturne",120000));
+        planetes.add(new Planete(7,"Uranus",52000));
+        planetes.add(new Planete(8,"Neptune",50000));
+        planetes.add(new Planete(9,"Pluton",2300));
 
         for (int index = 0; index < planetes.size(); index++) {
             Planete planete = planetes.get(index);
