@@ -7,8 +7,10 @@ import androidx.room.Room;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +20,13 @@ public class MainActivity extends AppCompatActivity {
     private MonRecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    public PlaneteDao planeteDao;
+    public PlaneteDao planetDao;
     public List<Planete> planetes;
+
+    private FloatingActionButton floatingActionButton;
 
     final String PREFS_NAME = "preferences_file";
 
-    TextView tv ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,11 +34,23 @@ public class MainActivity extends AppCompatActivity {
 
 
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "planetesDB").build();
+                AppDatabase.class, "planetsDB").build();
 
-        planeteDao = db.planeteDao();
+        planetDao = db.planetDao();
 
-        loadData(planeteDao);
+        loadData(planetDao);
+
+        floatingActionButton = findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AddPlanetPopUp addPlanet = new AddPlanetPopUp();
+                addPlanet.setPlaneteDao(planetDao);
+                addPlanet.show(getSupportFragmentManager(), "AddPlanetPopUp");
+
+            }
+        });
 
     }
 

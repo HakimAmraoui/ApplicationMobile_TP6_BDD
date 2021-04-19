@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">BDD</string>
-    <string name="name" />
-    <string name="size" />
+    <string name="name"> Name </string>
+    <string name="size"> Size </string>
+
+    <string name="planete_name">Planete name</string>
+    <string name="planete_size">Planete size</string>
+    <string name="add_planet">Add Planete</string>
+    <string name="name_invalid">Name is invalid</string>
+    <string name="size_invalid">Size is invalid</string>
 </resources>

@@ -20,5 +20,5 @@ import java.util.concurrent.Executors;
 
 @Database(entities = {Planete.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
-    public abstract PlaneteDao planeteDao();
+    public abstract PlaneteDao planetDao();
 }
